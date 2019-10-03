@@ -13,6 +13,14 @@ module.exports = {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader']
             },
+            {
+                test: /\.scss$/i,
+                use: [
+                    'style-loader', // 3. inject styles into DOM
+                    'css-loader',   // 2. turns CSS into CommonJS
+                    'sass-loader'   // 1. turns SASS into CSS
+                ]
+            },
         ],
     }
 };
