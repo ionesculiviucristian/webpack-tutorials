@@ -45,9 +45,9 @@ const _module = {
         {
             test: /\.site.scss$/,
             use: [
-                MiniCssExtractPlugin.loader,
-                "css-loader",
-                "sass-loader"
+                environment === "development"
+                ? "style-loader"
+                : MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"
             ]
         }
     ]
@@ -85,9 +85,7 @@ if (environment === "production") {
  *********************************/
 const plugins = [
     new MiniCssExtractPlugin({
-        filename: environment === "production" ? "../css/[name].bundle.min.css" : "../css/[name].bundle.css",
-        disable: false,
-        allChunks: false
+        filename: environment === "development" ? "[name].css" : "../css/[name].bundle.min.css"
     }),
     new webpack.LoaderOptionsPlugin({
         options: {

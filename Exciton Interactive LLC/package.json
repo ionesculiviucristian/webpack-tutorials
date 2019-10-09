@@ -5,23 +5,30 @@
   "main": "index.js",
   "scripts": {
     "build": "set NODE_ENV=development&&webpack --progress",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "express:dev": "node server.dev.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/webpack-env": "^1.14.0",
     "autoprefixer": "^9.6.4",
     "css-loader": "^3.2.0",
-    "mini-css-extract-plugin": "^0.8.0",
+    "express": "^4.17.1",
     "html-loader": "^0.5.5",
+    "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.9.0",
+    "opn": "^6.0.0",
     "postcss-loader": "^3.0.0",
     "pug-html-loader": "^1.1.5",
     "raw-loader": "^3.1.0",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
     "ts-loader": "^6.2.0",
+    "typescript": "^3.6.3",
     "webpack": "^4.6.0",
-    "webpack-cli": "^3.3.9"
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-hot-middleware": "^2.25.0"
   }
 }
