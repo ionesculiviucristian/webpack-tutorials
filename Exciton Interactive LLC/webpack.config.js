@@ -2,7 +2,7 @@
  * Environment and imports
  *********************************/
 const environment = process.env.NODE_ENV || "development";
-const isDEV = process.env.NODE_ENV === 'development';
+const isDEV = environment === 'development';
 const autoprefixer = require("autoprefixer");
 
 const webpack = require("webpack");
@@ -87,7 +87,7 @@ if (isDEV) {
  *********************************/
 const plugins = [
     new MiniCssExtractPlugin({
-        filename: isDEV ? "[name].css" : "../css/[name].bundle.min.css"
+        filename: isDEV ? "../css/[name].bundle.css" : "../css/[name].bundle.min.css"
     }),
     new webpack.LoaderOptionsPlugin({
         options: {
