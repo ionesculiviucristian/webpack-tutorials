@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=development webpack --progress",
-    "prod": "cross-env NODE_ENV=production webpack --progress",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "express:dev": "node server.dev.js"
+    "build:prod": "cross-env NODE_ENV=production webpack --progress -p",
+    "build:analyze": "cross-env NODE_ENV=production BUNDLE_ANALYZE=true webpack --progress -p",
+    "express:dev": "node server.dev.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@types/webpack-env": "^1.14.0",
     "autoprefixer": "^9.6.4",
     "cross-env": "^6.0.3",
@@ -30,6 +33,7 @@
     "ts-loader": "^6.2.0",
     "typescript": "^3.6.3",
     "webpack": "^4.6.0",
+    "webpack-bundle-analyzer": "^3.5.2",
     "webpack-cli": "^3.3.9",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0"

@@ -29,15 +29,6 @@ config.output.path = "/";
 config.output.publicPath = `http://localhost:${LOCAL_HOST_PORT}/wwwroot/js/`;
 
 /*********************************
- * HMR Plugin
- *********************************/
-config.plugins.push(
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-);
-
-/*********************************
  * Express
  *********************************/
 const compiler = webpack(config);

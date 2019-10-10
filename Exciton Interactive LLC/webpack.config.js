@@ -2,11 +2,14 @@
  * Environment and imports
  *********************************/
 const environment = process.env.NODE_ENV || "development";
-const isDEV = environment === 'development';
+const isDev = environment === 'development';
+const isProd = environment === 'production';
+const isAnalyze = process.env.BUNDLE_ANALYZE !== undefined;
 const autoprefixer = require("autoprefixer");
 
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 /*********************************
  * Entry
@@ -14,7 +17,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const entry = {
     "charting": "./Source/charting/charting.module.ts",
     "forms": "./Source/forms/forms.module.ts",
-    "main": ["./Source/main.site.ts", "./Source/main.site.scss"]
+    "main": ["./Source/main.site.ts", "./Source/main.site.scss"],
+    "index-fa-all": "./Source/index-fa-all.ts",
+    "index-fa-single": "./Source/index-fa-single.ts"
 };
 
 /*********************************
@@ -46,24 +51,13 @@ const _module = {
         {
             test: /\.site.scss$/,
             use: [
-                isDEV ? "style-loader" : MiniCssExtractPlugin.loader,
+                isDev ? "style-loader" : MiniCssExtractPlugin.loader,
                 "css-loader",
                 "postcss-loader",
                 "sass-loader"
             ]
         }
     ]
-};
-
-/*********************************
- * Optimization
- *********************************/
-const optimization = {
-    splitChunks: {
-        cacheGroups: {
-            commons: { test: /[\\/]node_modules[\\/]/, name: "common", chunks: "all" }
-        }
-    }
 };
 
 /*********************************
@@ -75,7 +69,7 @@ const output = {
     pathinfo: true
 };
 
-if (isDEV) {
+if (isDev) {
     output.publicPath = "/js/";
 } else {
     output.filename = "[name].bundle.min.js";
@@ -87,7 +81,7 @@ if (isDEV) {
  *********************************/
 const plugins = [
     new MiniCssExtractPlugin({
-        filename: isDEV ? "../css/[name].bundle.css" : "../css/[name].bundle.min.css"
+        filename: isDev ? "../css/[name].bundle.css" : "../css/[name].bundle.min.css"
     }),
     new webpack.LoaderOptionsPlugin({
         options: {
@@ -100,8 +94,20 @@ const plugins = [
         "process.env": {
             "NODE_ENV": JSON.stringify(process.env.NODE_ENV)
         }
-    })
+    }),
 ];
+
+if (isDev) {
+    plugins.push(
+        new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin()
+    );
+}
+
+if (isAnalyze) {
+    plugins.push(new BundleAnalyzerPlugin());
+}
 
 /*********************************
  * Resolve
@@ -119,6 +125,5 @@ module.exports = {
     resolve: resolve,
     mode: environment,
     module: _module,
-    optimization: optimization,
     plugins: plugins
 };
