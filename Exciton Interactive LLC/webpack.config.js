@@ -2,6 +2,7 @@
  * Environment and imports
  *********************************/
 const environment = process.env.NODE_ENV || "development";
+const isDEV = process.env.NODE_ENV === 'development';
 const autoprefixer = require("autoprefixer");
 
 const webpack = require("webpack");
@@ -45,9 +46,10 @@ const _module = {
         {
             test: /\.site.scss$/,
             use: [
-                environment === "development"
-                ? "style-loader"
-                : MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"
+                isDEV ? "style-loader" : MiniCssExtractPlugin.loader,
+                "css-loader",
+                "postcss-loader",
+                "sass-loader"
             ]
         }
     ]
@@ -73,11 +75,11 @@ const output = {
     pathinfo: true
 };
 
-if (environment === "production") {
+if (isDEV) {
+    output.publicPath = "/js/";
+} else {
     output.filename = "[name].bundle.min.js";
     output.pathinfo = false;
-} else if (environment === "development") {
-    output.publicPath = "/js/";
 }
 
 /*********************************
@@ -85,7 +87,7 @@ if (environment === "production") {
  *********************************/
 const plugins = [
     new MiniCssExtractPlugin({
-        filename: environment === "development" ? "[name].css" : "../css/[name].bundle.min.css"
+        filename: isDEV ? "[name].css" : "../css/[name].bundle.min.css"
     }),
     new webpack.LoaderOptionsPlugin({
         options: {
