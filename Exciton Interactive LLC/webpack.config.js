@@ -19,7 +19,9 @@ const entry = {
     "forms": "./Source/forms/forms.module.ts",
     "main": ["./Source/main.site.ts", "./Source/main.site.scss"],
     "index-fa-all": "./Source/index-fa-all.ts",
-    "index-fa-single": "./Source/index-fa-single.ts"
+    "index-fa-single": "./Source/index-fa-single.ts",
+    "page-1": ["./Source/pages/page-1.page.tsx"],
+    "page-2": ["./Source/pages/page-2.page.tsx"]
 };
 
 /*********************************
@@ -65,8 +67,7 @@ const _module = {
  *********************************/
 const output = {
     filename: "[name].bundle.js",
-    path: __dirname + "/wwwroot/js/",
-    pathinfo: true
+    path: __dirname + "/wwwroot/js/"
 };
 
 if (isDev) {
@@ -117,6 +118,18 @@ const resolve = {
 };
 
 /*********************************
+ * Optimization
+ *********************************/
+const optimization = {
+    splitChunks: {
+        cacheGroups: {
+            react: { test: /[\\/]node_modules[\\/]((react).*)[\\/]/, name: "react", chunks: "all" },
+            commons: { test: /[\\/]node_modules[\\/]((?!react).*)[\\/]/, name: "common", chunks: "all" }
+        }
+    }
+};
+
+/*********************************
  * Exports
  *********************************/
 module.exports = {
@@ -125,5 +138,6 @@ module.exports = {
     resolve: resolve,
     mode: environment,
     module: _module,
-    plugins: plugins
+    plugins: plugins,
+    optimization
 };
