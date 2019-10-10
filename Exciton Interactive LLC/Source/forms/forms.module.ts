@@ -1,12 +1,12 @@
-const className = "main-app";
+const className = "forms-app";
 
-export class MainModule {
+export class FormsModule {
     constructor() {
         const app = document.createElement("div");
         app.classList.add(className);
-        const child = document.createTextNode("main!");
+        const child = document.createTextNode("Forms Module!");
         app.appendChild(child);
         document.body.appendChild(app);
     }
 }
-new MainModule();
+new FormsModule();

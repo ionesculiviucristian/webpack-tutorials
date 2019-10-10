@@ -11,6 +11,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
  * Entry
  *********************************/
 const entry = {
+    "charting": "./Source/charting/charting.module.ts",
+    "forms": "./Source/forms/forms.module.ts",
     "main": ["./Source/main.site.ts", "./Source/main.site.scss"]
 };
 
@@ -21,14 +23,12 @@ const _module = {
     rules: [
         {
             test: /\.tsx?$/,
-            exclude: /node_modules/,
             use: [
                 "ts-loader"
             ]
         },
         {
             test: /\.pug$/,
-            exclude: /node_modules/,
             use: [
                 "raw-loader",
                 "pug-html-loader"

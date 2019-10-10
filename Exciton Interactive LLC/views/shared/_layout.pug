@@ -1,0 +1,9 @@
+include ./_mixins.pug
+
+html
+  head
+    title Webpack 4 - Hot Module Replacement with an Express Server
+    if environment === production
+      link(href="wwwroot/css/main.bundle.css", rel="stylesheet", type="text/css")
+  body
+    +navigation

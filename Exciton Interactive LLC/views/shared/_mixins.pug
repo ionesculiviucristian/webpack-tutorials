@@ -1,0 +1,10 @@
+mixin navigation
+  a(href="/") Home
+  a(href="/charting") Charting
+  a(href="/forms") Forms
+
+mixin scripts(script)
+  script(src="wwwroot/js/common.bundle.js")
+  script(src="wwwroot/js/main.bundle.js")
+  if script
+    script(src=`wwwroot/js/${script}.bundle.js`)

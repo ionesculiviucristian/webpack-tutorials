@@ -1,12 +1,12 @@
-const className = "main-app";
+const className = "charting-app";
 
-export class MainModule {
+export class ChartingModule {
     constructor() {
         const app = document.createElement("div");
         app.classList.add(className);
-        const child = document.createTextNode("main!");
+        const child = document.createTextNode("Charting Module!!!");
         app.appendChild(child);
         document.body.appendChild(app);
     }
 }
-new MainModule();
+new ChartingModule();

@@ -1,3 +1,5 @@
+const environment = process.env.NODE_ENV || "development";
+const path = require("path");
 const express = require("express");
 const opn = require("opn");
 const LOCAL_HOST_PORT = 3000;
@@ -10,59 +12,30 @@ const config = require("./webpack.config");
 /*********************************
  * Entry
  *********************************/
-let entryArray = [
-    "webpack/hot/dev-server",
-    "webpack-hot-middleware/client"
-];
+const webpackServer = "webpack/hot/dev-server";
+const webpackClient = "webpack-hot-middleware/client";
 
-if (Array.isArray(config.entry)) {
-    config.entry.forEach(element => entryArray.push(element));
-} else {
-    for (let entry in config.entry) {
-        if (config.entry.hasOwnProperty(entry) === false) {
-            continue;
-        }
-
-        const e = config.entry[entry];
-        if (Array.isArray(e)) {
-            e.forEach(x => {
-                entryArray.push(x);
-            });
-        } else if (typeof e === "string") {
-            entryArray.push(e);
-        } else {
-            throw new Error("Properties of the entry object should either be 'string' or 'Array<string>'.");
-        }
-    }
-}
-
-config.entry = entryArray;
+config.entry = Object.entries(config.entry)
+    .map(([k, entry]) => [k, Array.isArray(entry) ? entry : [entry]])
+    .reduce((carry, [k, entry]) => ({
+        ...carry,
+        [k]: [...entry, webpackServer, webpackClient]
+    }), {});
 
 /*********************************
  * Output
  *********************************/
-config.output = {
-    path: "/",
-    publicPath: `http://localhost:${LOCAL_HOST_PORT}/wwwroot/js/`,
-    filename: "bundle.js"
-};
+config.output.path = "/";
+config.output.publicPath = `http://localhost:${LOCAL_HOST_PORT}/wwwroot/js/`;
 
 /*********************************
  * HMR Plugin
  *********************************/
-const hmrPlugin = new webpack.HotModuleReplacementPlugin();
-
-if (typeof config.plugins === "undefined" || config.plugins === null) {
-    config.plugins = [hmrPlugin];
-} else {
-    let foundHmr = false;
-    config.plugins.forEach(x => {
-        foundHmr = foundHmr || x.constructor.name === hmrPlugin.constructor.name;
-    });
-    if (foundHmr === false) {
-        config.plugins.push(hmrPlugin);
-    }
-}
+config.plugins.push(
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+);
 
 /*********************************
  * Express
@@ -70,23 +43,25 @@ if (typeof config.plugins === "undefined" || config.plugins === null) {
 const compiler = webpack(config);
 const app = express();
 
-app.use(express.static(__dirname));
+app.set('views', path.resolve(__dirname, "views"));
+app.set('view engine', 'pug');
 
 app.use(webpackDevMiddleware(compiler,
     {
+        logLevel: 'debug',
         publicPath: config.output.publicPath,
-        stats: { colors: true }
+        stats: {colors: true}
     }));
 
-app.use(webpackHotMiddleware(compiler,
-    {
-        log: console.log
-    }));
+app.use(webpackHotMiddleware(compiler, {
+    log: console.log,
+    path: '/__webpack_hmr',
+    heartbeat: 10 * 1000
+}));
 
-router = express.Router();
-
-router.get("/", (req, res) => res.render("index"));
-app.use(router);
+app.get("/", (req, res) => res.render("index", {environment: environment}));
+app.get("/charting", (req, res) => res.render("charting", {environment: environment}));
+app.get("/forms", (req, res) => res.render("forms", {environment: environment}));
 
 app.listen(LOCAL_HOST_PORT, () => console.log(`listening on ${LOCAL_HOST_PORT}`));
 
