@@ -38,7 +38,7 @@ let randomValue: any = 10;
 randomValue = true;
 randomValue = "Some value";
 
-let myVariable: unknown = 10;
+let myVariable: unknown = "test value";
 
 function hasName(obj: any): obj is { name: string } {
     return !!obj && typeof obj === "object" && "name" in obj;
@@ -62,15 +62,19 @@ multiType = 10;
 multiType = true;
 
 function add(num1: number, num2?: number): number {
-    return num1 + num2;
+    return num2 ? num1 + num2 : num1;
 }
 
 add(5, 10);
 console.log(add(5));
 
+function fullName(person: { firstName: string, lastName: string }) {
+    console.log(`${person.firstName} ${person.lastName}`);
+}
 
+let p = {
+    firstName: "Bruce",
+    lastName: "Wayne"
+};
 
-
-
-
-
+console.log(fullName(p));
