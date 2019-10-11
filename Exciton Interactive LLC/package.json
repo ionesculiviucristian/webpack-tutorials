@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=development webpack --progress",
+    "build:lazy": "webpack --config webpack.lazy-loading.js",
     "build:prod": "cross-env NODE_ENV=production webpack --progress -p",
     "build:analyze": "cross-env NODE_ENV=production BUNDLE_ANALYZE=true webpack --progress -p",
     "express:dev": "node server.dev.js",
