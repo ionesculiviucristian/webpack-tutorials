@@ -68,13 +68,50 @@ function add(num1: number, num2?: number): number {
 add(5, 10);
 console.log(add(5));
 
-function fullName(person: { firstName: string, lastName: string }) {
+interface Person {
+    firstName: string;
+    lastName?: string;
+}
+
+function fullName(person: Person) {
     console.log(`${person.firstName} ${person.lastName}`);
 }
 
 let p = {
-    firstName: "Bruce",
-    lastName: "Wayne"
+    firstName: "Bruce"
 };
 
 console.log(fullName(p));
+
+class Employee {
+    public employeeName: string;
+    protected job: string;
+    private age: number;
+
+    constructor (name: string) {
+        this.employeeName = name;
+    }
+
+    greet () {
+        console.log(`Hello ${this.employeeName}`)
+    }
+}
+
+let emp1 = new Employee('Emily');
+console.log(emp1.employeeName);
+emp1.greet();
+
+class Manager extends Employee {
+    constructor (managerName: string) {
+        super(managerName);
+    }
+
+    delegateWork () {
+        console.log(`Manager delegating tasks`);
+    }
+}
+
+let m1 = new Manager('Bruce');
+m1.delegateWork();
+m1.greet();
+console.log(m1.employeeName);
