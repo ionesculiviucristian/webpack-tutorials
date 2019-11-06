@@ -26,6 +26,8 @@ person[Symbol.iterator] = function *() {
         yield this[t];
     }
 };
+const it = person[Symbol.iterator]();
+console.log(it);
 
 for (let p of person) {
     console.log(p);
